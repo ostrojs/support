@@ -1,0 +1,32 @@
+{
+  "name": "@ostro/support",
+  "version": "0.0.0-alpha.0",
+  "description": "OstroJS support module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@ostro/contracts": "^0.0.0-alpha.0",
+    "lodash": "^4.17.21",
+    "luxon": "^2.0.2",
+    "fs-extra": "^10.0.0"
+
+  },
+  "keywords": [
+    "ostro support",
+    "support"
+  ],
+  "author": "amar",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ostrojs/support.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ostrojs/support/issues"
+  },
+  "homepage": "https://github.com/ostrojs/support#readme",
+  "engines": {
+    "node": ">= 12.0"
+  }
+}
