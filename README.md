@@ -31,7 +31,7 @@
 [javascript-url]:  "javascript"
 
 [nodejs-image]: https://img.shields.io/badge/node-%3E%3D%2012.0.0-green
-[npm-url]: https://npmjs.org/package/@ostrojs/support "npm"
+[npm-url]: https://npmjs.org/package/@ostro/support "npm"
 
 [license-image]: https://img.shields.io/github/license/ostrojs/support
 [license-url]: LICENSE.md "license"

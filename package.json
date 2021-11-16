@@ -1,17 +1,20 @@
 {
   "name": "@ostro/support",
   "version": "0.0.0-alpha.0",
-  "description": "OstroJS support module",
+  "description": "Support for OstroJS",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@ostro/contracts": "^0.0.0-alpha.0",
+    "@ostro/contracts": "^0.0.0-alpha",
     "lodash": "^4.17.21",
     "luxon": "^2.0.2",
     "fs-extra": "^10.0.0"
-
   },
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "engineStrict": true,
   "keywords": [
     "ostro support",
     "support"
@@ -25,8 +28,5 @@
   "bugs": {
     "url": "https://github.com/ostrojs/support/issues"
   },
-  "homepage": "https://github.com/ostrojs/support#readme",
-  "engines": {
-    "node": ">= 12.0"
-  }
+  "homepage": "https://github.com/ostrojs/support#readme"
 }
