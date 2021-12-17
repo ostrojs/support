@@ -1,6 +1,6 @@
 const { Macroable } = require('./macro')
 const InvalidArgumentException = require('./exceptions/invalidArgumentException')
-
+const lodash = require('lodash')
 class Manager extends Macroable {
 
     constructor(application) {
@@ -43,22 +43,23 @@ class Manager extends Macroable {
         return this.resolve(name);
     }
 
-    resolve($driver, $config = {}) {
-        if (isset(this.$customCreators[$driver])) {
-            return this.callCustomCreator($driver);
-        } else {
-            let $method = 'create' + String.pascal($driver) + 'Driver';
+    resolve($name, $config = {}) {
 
-            if (method_exists(this, $method)) {
-                return this[$method]($config);
-            }
+        if (isset(this.$customCreators[$config['driver']])) {
+            return this.callCustomCreator($config, $name);
         }
 
-        throw new InvalidArgumentException("Driver [" + $driver + "] not supported.");
+        let $driverMethod = 'create' + String.pascal($config['driver']) + 'Driver';
+
+        if (method_exists(this, $driverMethod)) {
+            return this[$driverMethod]($config, $name);
+        }
+
+        throw new InvalidArgumentException("Driver [" + $config['driver'] + "] not supported.");
     }
 
-    callCustomCreator($driver) {
-        return this.$customCreators[$driver].call(this, this.$container, $driver, this.$config);
+    callCustomCreator($config, $name) {
+        return this.$customCreators[$config['driver']].call(this, this.$container, $name, $config );
     }
 
     extend($driver, $callback) {
@@ -76,22 +77,24 @@ class Manager extends Macroable {
 
     setContainer($container) {
         this.$container = $container;
-
         return this;
     }
 
     forgetDrivers() {
         this.$drivers = {};
-
         return this;
     }
 
     setDefaultDriver(name) {
-        this.$config.get(`${this.$type}.default`, name);
+        lodash.set(this.$config[this.$type]['default'],$name)
     }
 
     getDefaultDriver() {
-        return this.$config.get(`${this.$type}.default`);
+        return this.$config[this.$type]['default'];
+    }
+
+    getConfig($name,defaultValue) {
+        return lodash.get(this.$config[this.$type], $name, defaultValue)
     }
 
     __get(target, $method, ) {
