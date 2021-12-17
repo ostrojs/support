@@ -91,7 +91,7 @@ class Manager extends Macroable {
     }
 
     getDefaultDriver() {
-        return this.getConfig('default');
+        return lodash.get(this.$config,`${this.$type}.default`);
     }
 
     getConfig(name,defaultValue) {
