@@ -156,6 +156,10 @@ const Collect = (function() {
             return this.$items
         }
 
+        toJSON() {
+            return this.all()
+        }
+
         [Symbol.iterator]() {
             let i = 0
 

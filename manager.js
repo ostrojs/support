@@ -1,28 +1,26 @@
 const { Macroable } = require('./macro')
 const InvalidArgumentException = require('./exceptions/invalidArgumentException')
-const kContainer = Symbol('container')
-const kConfig = Symbol('config')
-const kCustomCreators = Symbol('customCreators')
-const kDrivers = Symbol('drivers')
+
 class Manager extends Macroable {
 
-    constructor() {
+    constructor(application) {
         super()
-        let $container = app()
+        let $container = application || app()
         Object.defineProperties(this, {
             '$container': {
                 value: $container,
             },
-            '$config':{
-                value:$container.make('config')
+            '$config': {
+                value: $container.make('config'),
+                writable: true
             },
-            '$customCreators':{
-                value:{},
-                writable:true
+            '$customCreators': {
+                value: {},
+                writable: true
             },
-            '$drivers':{
-                value:{},
-                writable:true
+            '$drivers': {
+                value: {},
+                writable: true
             }
         })
     }
@@ -35,34 +33,36 @@ class Manager extends Macroable {
         }
 
         if (!isset(this.$drivers[$driver])) {
-            this.$drivers[$driver] = this.createDriver($driver);
+            this.$drivers[$driver] = this.getDriver($driver);
         }
 
         return this.$drivers[$driver];
     }
 
-    createDriver($driver) {
+    getDriver(name) {
+        return this.resolve(name);
+    }
 
+    resolve($driver, $config = {}) {
         if (isset(this.$customCreators[$driver])) {
             return this.callCustomCreator($driver);
         } else {
             let $method = 'create' + String.pascal($driver) + 'Driver';
 
             if (method_exists(this, $method)) {
-                return this[$method]();
+                return this[$method]($config);
             }
         }
 
-        throw new InvalidArgumentException("Driver ["+$driver+"] not supported.");
+        throw new InvalidArgumentException("Driver [" + $driver + "] not supported.");
     }
 
     callCustomCreator($driver) {
-        return this.$customCreators[$driver](this.$container);
+        return this.$customCreators[$driver].call(this, this.$container, $driver, this.$config);
     }
 
     extend($driver, $callback) {
         this.$customCreators[$driver] = $callback;
-
         return this;
     }
 
@@ -86,7 +86,15 @@ class Manager extends Macroable {
         return this;
     }
 
-    __get(target, $method,) {
+    setDefaultDriver(name) {
+        this.$config.get(`${this.$type}.default`, name);
+    }
+
+    getDefaultDriver() {
+        return this.$config.get(`${this.$type}.default`);
+    }
+
+    __get(target, $method, ) {
         return this.make(target.driver(), $method);
     }
 }
