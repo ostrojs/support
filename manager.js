@@ -9,6 +9,7 @@ class Manager extends Macroable {
         Object.defineProperties(this, {
             '$container': {
                 value: $container,
+                writable: true
             },
             '$config': {
                 value: $container.make('config'),
@@ -86,18 +87,18 @@ class Manager extends Macroable {
     }
 
     setDefaultDriver(name) {
-        lodash.set(this.$config[this.$type]['default'],$name)
+        lodash.set(this.$config,`${this.$type}.default`,name)
     }
 
     getDefaultDriver() {
-        return this.$config[this.$type]['default'];
+        return lodash.get(this.$config,`${this.$type}.default`);
     }
 
-    getConfig($name,defaultValue) {
-        return lodash.get(this.$config[this.$type], $name, defaultValue)
+    getConfig(name,defaultValue) {
+        return lodash.get(this.$config,`${this.$type}.${name}`, defaultValue)
     }
 
-    __get(target, $method, ) {
+    __get(target, $method) {
         return this.make(target.driver(), $method);
     }
 }
