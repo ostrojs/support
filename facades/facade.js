@@ -4,21 +4,9 @@ const kApp = Symbol('app')
 const kResolvedInstance = Symbol('resolvedInstance')
 class Facade {
 
-    static get $app() {
-        return this[kApp] || null
-    };
+    static $app = null;
 
-    static get $resolvedInstance() {
-        return this[kResolvedInstance] = this[kResolvedInstance] || {}
-    };
-
-    static set $app(value) {
-        return this[kApp] = value
-    };
-
-    static set $resolvedInstance(value) {
-        return this[kResolvedInstance] = value
-    };
+    static $resolvedInstance = {};
 
     static resolved($callback) {
         let $accessor = this.getFacadeAccessor();
@@ -78,14 +66,13 @@ class Facade {
         this.$app = $app;
     }
 
-    static __call($target, $method, $args) {
+    static __get($target, $method) {
         let $instance = $target.getFacadeRoot();
 
         if (!$instance) {
             throw new InvalidFacadeAccessor($target.getFacadeAccessor());
         }
-
-        return $instance[$method](...$args);
+        return this.make($instance,$method);
     }
 
 }
