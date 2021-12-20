@@ -232,8 +232,15 @@ exports.env = function(key, defaultValue) {
     return value
 }
 
-exports.event = function(arg) {
-    app().handleEvent.fire(arg)
+exports.config = function(arg, defaultValue) {
+    let conf = app('config')
+    if(is_json(arg)){
+        for(let key in arg){
+            conf.set(key,arg[key])
+        }
+    }else{
+        return conf.get(arg,defaultValue)
+    }
 }
 
 exports.storage_path = function() {
