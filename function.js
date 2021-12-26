@@ -41,6 +41,10 @@ exports.is_function = function(fn) {
     return typeof fn == 'function'
 }
 
+exports.array_merge = function(array, array2) {
+    return array.concat(array2)
+}
+
 exports.unset = function(obj) {
     delete obj
 }
