@@ -193,7 +193,7 @@ exports.tap = function(value, fn) {
 }
 
 exports.date = function(string) {
-    return DateTime.format(string)
+    return Date.format(string)
 }
 
 exports.isFile = function($path) {
