@@ -6,7 +6,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@ostro/contracts": "^0.0.0-alpha",
+    "@ostro/contracts": "^1.0.0",
     "lodash": "^4.17.21",
     "luxon": "^2.0.2",
     "fs-extra": "^10.0.0"
