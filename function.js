@@ -21,9 +21,6 @@ module.__proto__.require = function($path) {
     var self = this;
     if ($path.startsWith('~/')) {
         $path = nodePath.resolve($path.replaceFirst('~/', ''))
-    } else if ($path.startsWith('./') || $path.startsWith('../')) {
-        $path = nodePath.join(nodePath.dirname(callsites()[2].getFileName()), $path)
-
     }
     return self.constructor._load($path, self);
 
