@@ -56,6 +56,21 @@ exports.random = function(length) {
     return result;
 }
 
+exports.debounce = (func, delay) => {
+    let debounceTimer
+    let fn = function() {
+        const context = this
+        const args = arguments
+        clearTimeout(debounceTimer)
+        debounceTimer
+            = setTimeout(() => func.apply(context, args), delay)
+    }
+    fn.clear = function() {
+        clearTimeout(debounceTimer)
+    }
+    return fn
+}
+
 exports.promiseAll = function promiseAll(object) {
     let promisedProperties = [];
     const objectKeys = Object.keys(object);
