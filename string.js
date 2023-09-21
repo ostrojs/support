@@ -332,6 +332,9 @@ String.replaceAllArray = function(string, find, replace) {
 String.trim = function(string = '', chars) {
     return lodash.trim(string, chars)
 }
+String.trimEnd = function(string = '', chars) {
+    return lodash.trimEnd(string, chars)
+}
 String.finish = function(string = '', finished = '') {
     if (!string.endsWith(finished)) {
         string = string + finished
