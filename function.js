@@ -21,9 +21,6 @@ module.__proto__.require = function($path) {
     var self = this;
     if ($path.startsWith('~/')) {
         $path = nodePath.resolve($path.replaceFirst('~/', ''))
-    } else if ($path.startsWith('./') || $path.startsWith('../')) {
-        $path = nodePath.join(nodePath.dirname(callsites()[2].getFileName()), $path)
-
     }
     return self.constructor._load($path, self);
 
@@ -57,6 +54,21 @@ exports.random = function(length) {
     }
 
     return result;
+}
+
+exports.debounce = (func, delay) => {
+    let debounceTimer
+    let fn = function() {
+        const context = this
+        const args = arguments
+        clearTimeout(debounceTimer)
+        debounceTimer
+            = setTimeout(() => func.apply(context, args), delay)
+    }
+    fn.clear = function() {
+        clearTimeout(debounceTimer)
+    }
+    return fn
 }
 
 exports.promiseAll = function promiseAll(object) {
