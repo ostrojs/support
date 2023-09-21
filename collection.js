@@ -111,7 +111,7 @@ class Collection extends Macroable.extend(CollectionInterface) {
     }
 
     has(clause) {
-        return this[kUpdateData](lodash.has(this.$items, clause))
+        return lodash.has(this.$items, clause)
     }
 
     keys() {
@@ -151,15 +151,15 @@ class Collection extends Macroable.extend(CollectionInterface) {
     }
 
     pluck(first, second) {
-        let results = second ? {} : []
+        let results = second ? {} : [];
         for (let data of this.$items) {
             if (second) {
-                results[data[second]] = data[first]
+                results[lodash.get(data,second)] = lodash.get(data,first)
             } else {
-                results.push(data[first])
+                results.push(lodash.get(data,first))
             }
         }
-        return results
+        return this[kUpdateData](results)
     }
 
     push() {
