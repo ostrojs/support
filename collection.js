@@ -81,11 +81,11 @@ class Collection extends Macroable.extend(CollectionInterface) {
     }
 
     count() {
-        return this[kUpdateData](lodash.size(this.$items))
+        return lodash.size(this.$items)
     }
 
     countBy(clause) {
-        return this[kUpdateData](lodash.countBy(this.$items, clause))
+        return lodash.countBy(this.$items, clause)
     }
 
     difference(array) {
@@ -154,9 +154,9 @@ class Collection extends Macroable.extend(CollectionInterface) {
         let results = second ? {} : [];
         for (let data of this.$items) {
             if (second) {
-                results[lodash.get(data,second)] = lodash.get(data,first)
+                results[lodash.get(data, second)] = lodash.get(data, first)
             } else {
-                results.push(lodash.get(data,first))
+                results.push(lodash.get(data, first))
             }
         }
         return this[kUpdateData](results)
@@ -185,11 +185,11 @@ class Collection extends Macroable.extend(CollectionInterface) {
     }
 
     first() {
-        return this[kUpdateData](lodash.head(this.$items))
+        return lodash.head(this.$items);
     }
 
     last() {
-        return this[kUpdateData](lodash.last(this.$items))
+        return lodash.last(this.$items);
     }
 
     firstWhere(clause) {
