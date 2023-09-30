@@ -59,7 +59,7 @@ var irregular = {
     'tooth': 'teeth',
     'person': 'people'
 };
-String.prototype.plural = function(revert) {
+String.prototype.plural = function (revert) {
     var uncountable = ['sheep', 'fish', 'deer', 'moose', 'series', 'species', 'money', 'rice', 'information', 'equipment'];
     if (uncountable.indexOf(this.toLowerCase()) >= 0)
         return this;
@@ -85,41 +85,44 @@ String.prototype.plural = function(revert) {
     }
     return String(this);
 }
+String.plural = function (string, revert) {
+    return string.plural()
+}
 
-String.lower = function(string) {
+String.lower = function (string) {
     return string.toLowerCase()
 }
 
-String.uper = function(string) {
+String.uper = function (string) {
     return string.toUperCase()
 }
 
-String.prototype.ucfirst = function() {
+String.prototype.ucfirst = function () {
     return String.ucfirst(this)
 
 }
 
-String.ucfirst = function(string) {
+String.ucfirst = function (string) {
     return string[0].toUpperCase() + string.slice(1);
 }
 
-String.capitalize = function(string) {
+String.capitalize = function (string) {
     return lodash.capitalize(string)
 }
 
-String.isString = function(content) {
+String.isString = function (content) {
     return typeof content == 'string'
 }
 
-String.prototype.capitalize = function() {
+String.prototype.capitalize = function () {
     return this.capitalize(...arguments)
 }
 
-String.prototype.pascal = function() {
+String.prototype.pascal = function () {
     return String.pascal(this)
 };
 
-String.pascal = function(string) {
+String.pascal = function (string) {
     return string
         .replace(new RegExp(/[-_]+/, 'g'), ' ')
         .replace(new RegExp(/[^\w\s]/, 'g'), '')
@@ -131,167 +134,170 @@ String.pascal = function(string) {
         .replace(new RegExp(/\w/), s => s.toUpperCase());
 }
 
-String.camelCase = function(string) {
+String.camelCase = function (string) {
     return lodash.camelCase(string)
 }
+String.camel = function (string) {
+    return String.camelCase(string)
+}
 
-String.prototype.camelCase = function() {
+String.prototype.camelCase = function () {
     return String.camelCase(this)
 }
 
-String.studly = function(string) {
+String.studly = function (string) {
     return String.pascal(string)
 }
 
-String.prototype.studly = function() {
+String.prototype.studly = function () {
     return String.studly(this)
 }
 
-String.deburr = function(string) {
+String.deburr = function (string) {
     return lodash.deburr(string)
 }
 
-String.prototype.deburr = function() {
+String.prototype.deburr = function () {
     return String.deburr(this)
 }
 
-String.endsWith = function(string, target, position) {
+String.endsWith = function (string, target, position) {
     return lodash.endsWith(string, target, position)
 }
 
-String.prototype.endsWith = function(target, position) {
+String.prototype.endsWith = function (target, position) {
     return String.endsWith(this, target, position)
 }
 
-String.escape = function(string) {
+String.escape = function (string) {
     return lodash.escape(string)
 }
 
-String.prototype.escape = function() {
+String.prototype.escape = function () {
     return String.escape(this)
 }
 
-String.escapeRegExp = function(string) {
+String.escapeRegExp = function (string) {
     return lodash.escapeRegExp(string)
 }
 
-String.prototype.escapeRegExp = function() {
+String.prototype.escapeRegExp = function () {
     return String.escapeRegExp(this)
 }
 
-String.kebabCase = function(string) {
+String.kebabCase = function (string) {
     return lodash.kebabCase(string)
 }
-String.prototype.kebabCase = function() {
+String.prototype.kebabCase = function () {
     return String.kebabCase(this)
 }
 
-String.lowerFirst = function(string) {
+String.lowerFirst = function (string) {
     return lodash.lowerFirst(string)
 }
-String.prototype.lowerFirst = function() {
+String.prototype.lowerFirst = function () {
     return String.lowerFirst(this)
 }
 
-String.pad = function(string, length, char) {
+String.pad = function (string, length, char) {
     return lodash.pad(string, length, char)
 }
 
-String.prototype.pad = function(length, char) {
+String.prototype.pad = function (length, char) {
     return String.pad(this, length, char)
 }
 
-String.padEnd = function(string, length, char) {
+String.padEnd = function (string, length, char) {
     return lodash.padEnd(string, length, char)
 }
 
-String.prototype.padEnd = function(length, char) {
+String.prototype.padEnd = function (length, char) {
     return String.padEnd(this, length, char)
 }
 
-String.padStart = function(string, length, char) {
+String.padStart = function (string, length, char) {
     return lodash.padStart(string, length, char)
 }
 
-String.prototype.padStart = function(length, char) {
+String.prototype.padStart = function (length, char) {
     return String.padStart(this, length, char)
 }
 
-String.repeat = function(string, n) {
+String.repeat = function (string, n) {
     return lodash.repeat(string, n)
 }
 
-String.prototype.repeat = function(n) {
+String.prototype.repeat = function (n) {
     return String.repeat(this, n)
 }
 
-String.startCase = function(string) {
+String.startCase = function (string) {
     return lodash.startCase(string)
 }
-String.prototype.startCase = function() {
+String.prototype.startCase = function () {
     return String.startCase(this)
 }
 
-String.snake = function(string) {
+String.snake = function (string) {
     return String.snakeCase(string)
 }
-String.prototype.snake = function() {
+String.prototype.snake = function () {
     return String.snakeCase(this)
 }
 
-String.snakeCase = function(string) {
+String.snakeCase = function (string) {
     return lodash.snakeCase(string)
 }
 
-String.prototype.snakeCase = function() {
+String.prototype.snakeCase = function () {
     return String.snakeCase(this)
 }
 
-String.startsWith = function(string, target, position) {
+String.startsWith = function (string, target, position) {
     return lodash.startsWith(string, target, position)
 }
-String.prototype.startsWith = function(target, position) {
+String.prototype.startsWith = function (target, position) {
     return String.startsWith(this, target, position)
 }
 
-String.template = function(string, data = {}, options = {}) {
+String.template = function (string, data = {}, options = {}) {
     options.templateSettings.interpolate = /{{([\s\S]+?)}}/g;
     return _.template(string)(replace)
 }
 
-String.truncate = function(string, options = {}) {
+String.truncate = function (string, options = {}) {
     return lodash.truncate(string, options = {})
 }
 
-String.prototype.truncate = function(options = {}) {
+String.prototype.truncate = function (options = {}) {
     return String.truncate(this, options = {})
 }
 
-String.upperFirst = function(string) {
+String.upperFirst = function (string) {
     return lodash.upperFirst(string)
 }
 
-String.prototype.upperFirst = function() {
+String.prototype.upperFirst = function () {
     return String.upperFirst(this)
 }
 
-String.words = function(string) {
+String.words = function (string) {
     return lodash.words(string)
 }
-String.prototype.words = function() {
+String.prototype.words = function () {
     return String.words(this)
 }
 
-String.replace = function(string, pattern, replacement) {
+String.replace = function (string, pattern, replacement) {
     return lodash.replace(string, pattern, replacement)
 }
-String.replaceFirst = function(string, pattern, replacement) {
+String.replaceFirst = function (string, pattern, replacement) {
     return String.replace(string, new RegExp(pattern.replace(/\\/ig, '\\\\'), "g"), replacement)
 }
-String.prototype.replaceFirst = function(pattern, replacement) {
+String.prototype.replaceFirst = function (pattern, replacement) {
     return String.replaceFirst(this, pattern, replacement)
 }
-String.replaceAll = function(string, pattern, replacement) {
+String.replaceAll = function (string, pattern, replacement) {
     if (Array.isArray(pattern)) {
         for (var i = 0; i < pattern.length; i++) {
             string = String.replace(string, new RegExp(pattern[i].replace(/\\/ig, '\\\\'), "ig"), replacement)
@@ -303,60 +309,67 @@ String.replaceAll = function(string, pattern, replacement) {
     return string
 }
 
-String.prototype.replaceAll = function(pattern, replacement) {
+String.prototype.replaceAll = function (pattern, replacement) {
     return String.replaceAll(this, pattern, replacement)
 }
 
-String.prototype.replaceArray = function(find, replace) {
+String.prototype.replaceArray = function (find, replace) {
     return String.replaceArray(this, find, replace)
 };
 
-String.replaceArray = function(string, find, replace) {
+String.replaceArray = function (string, find, replace) {
     for (var i = 0; i < find.length; i++) {
         string = string.replace(find[i], replace[i]);
     }
     return string;
 }
 
-String.prototype.replaceAllArray = function(find, replace) {
+String.prototype.replaceAllArray = function (find, replace) {
     return String.replaceAllArray(this, find, replace)
 };
 
-String.replaceAllArray = function(string, find, replace) {
+String.replaceAllArray = function (string, find, replace) {
     for (var i = 0; i < find.length; i++) {
         string = string.replaceAll(find[i], replace[i]);
     }
     return string;
 }
 
-String.trim = function(string = '', chars) {
+String.trim = function (string = '', chars) {
     return lodash.trim(string, chars)
 }
-String.trimEnd = function(string = '', chars) {
+String.trimEnd = function (string = '', chars) {
     return lodash.trimEnd(string, chars)
 }
-String.finish = function(string = '', finished = '') {
+String.finish = function (string = '', finished = '') {
     if (!string.endsWith(finished)) {
         string = string + finished
     }
     return string
 
 }
-String.prototype.finish = function(word) {
+String.prototype.finish = function (word) {
     return String.finish(this, word)
 }
 
-String.after = function(string = '', after = '') {
+String.after = function (string = '', after = '') {
     return string.replace(new RegExp('(.*)' + after), "");
 
 }
-String.prototype.after = function(after) {
+String.prototype.after = function (after) {
     return String.after(this, after)
 }
 
-String.includes = function(string = '', words) {
+String.includes = function (string = '', words) {
     return string.includes(words)
 }
-String.contains = function() {
+String.contains = function () {
     return String.includes(...arguments)
+}
+String.pluralStudly = function () {
+    const studlyCaseString = String.camelCase(...arguments)
+    return String.plural(studlyCaseString)
+}
+String.prototype.pluralStudly = function () {
+    String.pluralStudly(this)
 }
