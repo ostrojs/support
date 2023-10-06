@@ -1,8 +1,6 @@
 const lodash = require('lodash')
 const { Macroable } = require('./macro')
 const CollectionInterface = require('@ostro/contracts/collection/collect')
-const kCollection = Symbol('items')
-const kDataType = Symbol('datatype')
 const kUpdateData = Symbol('update')
 class Collection extends Macroable.extend(CollectionInterface) {
     constructor(data) {
@@ -49,6 +47,24 @@ class Collection extends Macroable.extend(CollectionInterface) {
 
     where(clause) {
         return this[kUpdateData](lodash.filter(this.$items, clause))
+    }
+
+    only() {
+        return this.index(...arguments)
+    }
+
+    mapWithKeys(callback) {
+        const mappedItems = {};
+        lodash.forEach(this.$items, (value, key) => {
+            const result = callback(value, key);
+            if (Array.isArray(result) && result.length === 2) {
+                const newKey = result[0];
+                const newValue = result[1];
+                mappedItems[newKey] = newValue;
+            }
+        });
+
+        return this[kUpdateData](mappedItems);
     }
 
     take(clause, position = 'left') {
