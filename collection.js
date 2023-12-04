@@ -44,8 +44,8 @@ class Collection extends Macroable.extend(CollectionInterface) {
         return this[kUpdateData](lodash.uniq(this.$items))
     }
 
-
-    where(clause) {
+    where(clause, value) {
+        clause = typeof clause == 'string' ? { [clause]: value } : clause;
         return this[kUpdateData](lodash.filter(this.$items, clause))
     }
 
