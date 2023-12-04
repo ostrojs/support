@@ -1,13 +1,12 @@
 const nodePath = require('path');
 const fs = require('fs-extra')
 const util = require('util')
-const manifest = Object.create(null)
 const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 Date.format = function (format) {
     return require('./facades/date').format(format)
 }
 
-const callsites = () => {
+exports.callsites = () => {
     const _prepareStackTrace = Error.prepareStackTrace;
     Error.prepareStackTrace = (_, stack) => stack;
     const stack = new Error().stack.slice(1);
@@ -232,7 +231,7 @@ exports.dirname = function ($path) {
     return path.dirname($path)
 }
 
-function isFunction(functionToCheck) {
+exports.isFunction = function (functionToCheck) {
     return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
 }
 
@@ -293,6 +292,10 @@ exports.mix = function (assetPath) {
 
 exports.get_class_name = function ($class) {
     return typeof $class == 'object' ? $class.constructor.name : (typeof $class == 'function' ? $class.name : undefined)
+}
+
+exports.get_class = function ($class) {
+    return $class.constructor;
 }
 
 exports.deepAssign = function (target, ...sources) {
