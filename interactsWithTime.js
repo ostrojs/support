@@ -1,12 +1,11 @@
 
-const DateTimeInterface = require('@ostro/support/dateTime');;
-const DateTime = require('./dateTime');
+const DateTime = require('./dateTime');;
 class InteractsWithTime {
 
     secondsUntil($delay) {
         $delay = this.parseDateInterval($delay);
 
-        return $delay instanceof DateTimeInterface
+        return $delay instanceof DateTime
             ? max(0, $delay.getTimestamp() - this.currentTime())
             : parseInt($delay);
     }
@@ -14,13 +13,13 @@ class InteractsWithTime {
     availableAt($delay = 0) {
         $delay = this.parseDateInterval($delay);
 
-        return $delay instanceof DateTimeInterface
+        return $delay instanceof DateTime
             ? $delay.getTimeStamp()
-            : DateTime.now().plus({ second: $delay }).getTimestamp();
+            : DateTime.now().addSeconds($delay).getTimestamp();
     }
 
     parseDateInterval($delay) {
-        if ($delay instanceof DateTimeInterface) {
+        if ($delay instanceof DateTime) {
             $delay = DateTime.now().add($delay);
         }
 
