@@ -1,6 +1,6 @@
 {
   "name": "@ostro/support",
-  "version": "1.0.13",
+  "version": "1.1.0",
   "description": "Support for OstroJS",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
