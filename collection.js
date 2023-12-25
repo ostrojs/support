@@ -3,270 +3,278 @@ const { Macroable } = require('./macro')
 const CollectionInterface = require('@ostro/contracts/collection/collect')
 const kUpdateData = Symbol('update')
 class Collection extends Macroable.extend(CollectionInterface) {
-    constructor(data) {
-        super()
-        this.$items = data;
-        this.length = data.length;
-    }
-    static make(data) {
-        return new this(data)
-    }
-    static collect(data) {
-        return this.make(data)
-    }
-    map(cb) {
-        return this[kUpdateData](lodash.flatMap(this.$items, cb))
+	constructor(data) {
+		super()
+		this.$items = data;
+		this.length = data.length;
+	}
+	static make(data) {
+		return new this(data)
+	}
+	static collect(data) {
+		return this.make(data)
+	}
+	map(cb) {
+		return this[kUpdateData](lodash.flatMap(this.$items, cb))
 
-    }
+	}
 
-    forEach(cb) {
-        return this[kUpdateData](lodash.forEach(this.$items, cb))
-    }
+	forEach(cb) {
+		return this[kUpdateData](lodash.forEach(this.$items, cb))
+	}
 
-    flatMap(iteratee, depth = 1) {
-        return this[kUpdateData](lodash.flatMapDepth(this.$items, iteratee, depth))
-    }
+	flatMap(iteratee, depth = 1) {
+		return this[kUpdateData](lodash.flatMapDepth(this.$items, iteratee, depth))
+	}
 
-    flatten(depth = 1) {
-        return this[kUpdateData](lodash.flattenDepth(this.$items, depth))
-    }
+	flatten(depth = 1) {
+		return this[kUpdateData](lodash.flattenDepth(this.$items, depth))
+	}
 
-    sortBy(iteratees) {
-        return this[kUpdateData](lodash.sortBy(this.$items, iteratees))
-    }
-
-
-    reject(predicate) {
-        return this[kUpdateData](lodash.reject(this.$items, predicate))
-    }
-
-    unique() {
-        return this[kUpdateData](lodash.uniq(this.$items))
-    }
-
-    where(clause, value) {
-        clause = typeof clause == 'string' ? { [clause]: value } : clause;
-        return this[kUpdateData](lodash.filter(this.$items, clause))
-    }
-
-    only() {
-        return this.index(...arguments)
-    }
-
-    mapWithKeys(callback) {
-        const mappedItems = {};
-        lodash.forEach(this.$items, (value, key) => {
-            const result = callback(value, key);
-            if (Array.isArray(result) && result.length === 2) {
-                const newKey = result[0];
-                const newValue = result[1];
-                mappedItems[newKey] = newValue;
-            }
-        });
-
-        return this[kUpdateData](mappedItems);
-    }
-
-    take(clause, position = 'left') {
-        if (!['left', 'right'].includes(position)) {
-            throw Error('Only left or right are allowed.')
-        }
-        position = position == 'left' ? 'take' : 'takeRight';
-        return this[kUpdateData](lodash[position](this.$items, clause))
-    }
-
-    index(clause) {
-        return this[kUpdateData](lodash[((typeof clause == 'function') ? 'pickBy' : 'pick')](this.$items, clause))
-    }
-
-    reduce(clause, init = 0) {
-        return this[kUpdateData](lodash.reduce(this.$items, clause, init))
-    }
-
-    chunk(devide) {
-        return this[kUpdateData](lodash.chunk(this.$items, devide))
-    }
+	sortBy(iteratees) {
+		return this[kUpdateData](lodash.sortBy(this.$items, iteratees))
+	}
 
 
-    concat(arr) {
-        return this[kUpdateData](super.concat(arr))
-    }
+	reject(predicate) {
+		return this[kUpdateData](lodash.reject(this.$items, predicate))
+	}
 
-    contains(clause) {
-        return this[kUpdateData](lodash.includes(this.$items, clause))
-    }
+	unique() {
+		return this[kUpdateData](lodash.uniq(this.$items))
+	}
 
-    count() {
-        return lodash.size(this.$items)
-    }
+	where(clause, value) {
+		clause = typeof clause == 'string' ? { [clause]: value } : clause;
+		return this[kUpdateData](lodash.filter(this.$items, clause))
+	}
 
-    countBy(clause) {
-        return lodash.countBy(this.$items, clause)
-    }
+	only() {
+		return this.index(...arguments)
+	}
 
-    difference(array) {
-        return this[kUpdateData](lodash.difference(this.$items, array))
-    }
+	mapWithKeys(callback) {
+		const mappedItems = {};
+		lodash.forEach(this.$items, (value, key) => {
+			const result = callback(value, key);
+			if (Array.isArray(result) && result.length === 2) {
+				const newKey = result[0];
+				const newValue = result[1];
+				mappedItems[newKey] = newValue;
+			}
+		});
 
-    differenceBy(array, clause) {
-        return this[kUpdateData](lodash.differenceBy(this.$items, array, clause))
-    }
+		return this[kUpdateData](mappedItems);
+	}
 
-    differenceWith(array, clause) {
-        return this[kUpdateData](lodash.differenceWith(this.$items, array, clause))
-    }
+	take(clause, position = 'left') {
+		if (!['left', 'right'].includes(position)) {
+			throw Error('Only left or right are allowed.')
+		}
+		position = position == 'left' ? 'take' : 'takeRight';
+		return this[kUpdateData](lodash[position](this.$items, clause))
+	}
+
+	index(clause) {
+		return this[kUpdateData](lodash[((typeof clause == 'function') ? 'pickBy' : 'pick')](this.$items, clause))
+	}
+
+	reduce(clause, init = 0) {
+		return this[kUpdateData](lodash.reduce(this.$items, clause, init))
+	}
+
+	chunk(devide) {
+		return this[kUpdateData](lodash.chunk(this.$items, devide))
+	}
 
 
-    filter(clause) {
-        return this[kUpdateData](lodash.filter(this.$items, clause))
-    }
+	concat(arr) {
+		return this[kUpdateData](super.concat(arr))
+	}
+
+	contains(clause) {
+		return this[kUpdateData](lodash.includes(this.$items, clause))
+	}
+
+	count() {
+		return lodash.size(this.$items)
+	}
+
+	countBy(clause) {
+		return lodash.countBy(this.$items, clause)
+	}
+
+	difference(array) {
+		return this[kUpdateData](lodash.difference(this.$items, array))
+	}
+
+	differenceBy(array, clause) {
+		return this[kUpdateData](lodash.differenceBy(this.$items, array, clause))
+	}
+
+	differenceWith(array, clause) {
+		return this[kUpdateData](lodash.differenceWith(this.$items, array, clause))
+	}
 
 
-    groupBy(clause) {
-        return this[kUpdateData](lodash.groupBy(this.$items, clause))
-    }
+	filter(clause) {
+		return this[kUpdateData](lodash.filter(this.$items, clause))
+	}
 
-    has(clause) {
-        return lodash.has(this.$items, clause)
-    }
 
-    keys() {
-        return this[kUpdateData](lodash.keys(this.$items))
-    }
+	groupBy(clause) {
+		return this[kUpdateData](lodash.groupBy(this.$items, clause))
+	}
 
-    max(clause) {
-        return lodash[(clause) ? 'maxBy' : 'max'](this.$items, clause)
-    }
+	has(clause) {
+		return lodash.has(this.$items, clause)
+	}
 
-    min() {
-        return lodash[(clause) ? 'minBy' : 'min'](this.$items, clause)
-    }
+	keys() {
+		return this[kUpdateData](lodash.keys(this.$items))
+	}
 
-    pull() {
-        return this[kUpdateData](lodash.pull(this.$items, ...arguments))
-    }
+	max(clause) {
+		return lodash[(clause) ? 'maxBy' : 'max'](this.$items, clause)
+	}
 
-    join(clause) {
-        return this[kUpdateData](lodash.join(this.$items, clause))
-    }
+	min() {
+		return lodash[(clause) ? 'minBy' : 'min'](this.$items, clause)
+	}
 
-    isEmpty() {
-        return this[kUpdateData](lodash.isEmpty(this.$items))
-    }
+	pull() {
+		return this[kUpdateData](lodash.pull(this.$items, ...arguments))
+	}
 
-    intersection(array) {
-        return this[kUpdateData](lodash.intersection(this.$items, array))
-    }
+	join(clause) {
+		return this[kUpdateData](lodash.join(this.$items, clause))
+	}
 
-    intersectionBy(array, clause) {
-        return this[kUpdateData](lodash.intersectionBy(this.$items, array, clause))
-    }
+	isEmpty() {
+		return this[kUpdateData](lodash.isEmpty(this.$items))
+	}
 
-    keyBy(clause) {
-        return this[kUpdateData](lodash.keyBy(this.$items, clause))
-    }
+	intersection(array) {
+		return this[kUpdateData](lodash.intersection(this.$items, array))
+	}
 
-    pluck(first, second) {
-        let results = second ? {} : [];
-        for (let data of this.$items) {
-            if (second) {
-                results[lodash.get(data, second)] = lodash.get(data, first)
-            } else {
-                results.push(lodash.get(data, first))
-            }
-        }
-        return this[kUpdateData](results)
-    }
+	intersectionBy(array, clause) {
+		return this[kUpdateData](lodash.intersectionBy(this.$items, array, clause))
+	}
 
-    push() {
-        return this[kUpdateData](lodash.concat(this.$items, ...arguments))
-    }
+	keyBy(clause) {
+		return this[kUpdateData](lodash.keyBy(this.$items, clause))
+	}
 
-    put(key, value) {
-        return this[kUpdateData](lodash.assign(this.$items, {
-            [key]: value
-        }))
-    }
+	pluck(first, second) {
+		let results = second ? {} : [];
+		for (let data of this.$items) {
+			if (second) {
+				results[lodash.get(data, second)] = lodash.get(data, first)
+			} else {
+				results.push(lodash.get(data, first))
+			}
+		}
+		return this[kUpdateData](results)
+	}
 
-    shuffle() {
-        return this[kUpdateData](lodash.shuffle(this.$items))
-    }
+	push() {
+		return this[kUpdateData](lodash.concat(this.$items, ...arguments))
+	}
 
-    without() {
-        return this[kUpdateData](lodash.without(this.$items, ...arguments))
-    }
+	prepend() {
+		return this[kUpdateData](lodash.concat(...arguments, this.$items))
+	}
 
-    skip(end) {
-        return this[kUpdateData](lodash.slice(this.$items, 0, end))
-    }
+	put(key, value) {
+		return this[kUpdateData](lodash.assign(this.$items, {
+			[key]: value
+		}))
+	}
 
-    first() {
-        return lodash.head(this.$items);
-    }
+	shuffle() {
+		return this[kUpdateData](lodash.shuffle(this.$items))
+	}
 
-    last() {
-        return lodash.last(this.$items);
-    }
+	without() {
+		return this[kUpdateData](lodash.without(this.$items, ...arguments))
+	}
 
-    firstWhere(clause) {
-        return this.where(clause).first()
-    }
+	skip(end) {
+		return this[kUpdateData](lodash.slice(this.$items, 0, end))
+	}
 
-    get(clause) {
-        return this[kUpdateData](lodash.get(this.$items, clause))
-    }
+	slice(index, end) {
+		return this[kUpdateData](lodash.slice(this.$items, index, end))
+	}
 
-    values() {
-        return this[kUpdateData](lodash.values(this.$items))
-    }
+	first() {
+		return lodash.head(this.$items);
+	}
 
-    all() {
-        return this.$items
-    }
+	last() {
+		return lodash.last(this.$items);
+	}
 
-    toArray() {
-        return this.all();
-    }
+	firstWhere(clause) {
+		return this.where(clause).first()
+	}
 
-    toJSON() {
-        return { ...this.all() };
-    }
+	get(clause) {
+		return this[kUpdateData](lodash.get(this.$items, clause))
+	}
 
-    toJson() {
-        return this.toJSON();
-    }
+	values() {
+		return this[kUpdateData](lodash.values(this.$items))
+	}
 
-    serialize() {
-        let $value = this.all();
-        if (Array.isArray($value)) {
-            return this.toArray();
+	all() {
+		return this.$items
+	}
 
-        } else {
-            return this.toJSON();
-        }
-    }
+	toArray() {
+		return this.all();
+	}
 
-    [Symbol.iterator]() {
-        let i = 0
+	toJSON() {
+		return { ...this.all() };
+	}
 
-        return {
-            next: () => {
-                if (i < this.length) {
-                    return { done: false, value: this.$items[i++] };
-                } else {
-                    return { done: true };
-                }
-            }
+	toJson() {
+		return this.toJSON();
+	}
 
-        };
-    }
-    [kUpdateData](data) {
-        return new this.constructor(data)
-    }
+	serialize() {
+		let $value = this.all();
+		if (Array.isArray($value)) {
+			return this.toArray();
 
-    __get(target, method) {
-        return target.$items[method]
-    }
+		} else {
+			return this.toJSON();
+		}
+	}
+
+	[Symbol.iterator]() {
+		let i = 0
+
+		return {
+			next: () => {
+				if (i < this.length) {
+					return { done: false, value: this.$items[i++] };
+				} else {
+					return { done: true };
+				}
+			}
+
+		};
+	}
+	[kUpdateData](data) {
+		return new this.constructor(data)
+	}
+
+	__get(target, method) {
+		return target.$items[method]
+	}
 
 }
 
