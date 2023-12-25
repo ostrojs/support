@@ -172,7 +172,7 @@ exports.is_array = function (data) {
 }
 
 exports.method_exists = function (instance = {}, method) {
-	return typeof instance[method] == 'function'
+	return  method in instance && typeof instance[method] == 'function'
 }
 
 exports.is_callable = function ($cb) {
@@ -414,6 +414,10 @@ exports.in_array = function (value, datas = []) {
 
 exports.range = function (start, end, step = 1) {
 	return Array.from({ length: Math.floor((end - start) / step) + 1 }, (_, index) => start + index * step);
+}
+
+exports.str_contains = function (data, check) {
+	return typeof data == 'string' ? data.includes(check) : false;
 }
 
 exports.getCallerFunctionName = function (name) {
