@@ -93,7 +93,7 @@ class Collection extends Macroable.extend(CollectionInterface) {
 	}
 
 	contains(clause) {
-		return this[kUpdateData](lodash.includes(this.$items, clause))
+		return lodash.includes(this.$items, clause)
 	}
 
 	count() {
