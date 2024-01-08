@@ -10,7 +10,10 @@ let loaded = false;
             global[helperKey] = functions[helperKey]
         })
         Object.keys(arrays).map(arraykey => {
-            Array.prototype[arraykey] = arrays[arraykey]
+            Object.defineProperty(Array.prototype, arraykey, {
+                value: arrays[arraykey],
+                enumerable: false,
+            });
         })
     }
 })()
