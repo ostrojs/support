@@ -1,12 +1,13 @@
-const InvalidFacadeAccessor = require('./exceptions/invalidFacadeAccessor')
-const RuntimeException = require('../exceptions/runtimeException')
-const kApp = Symbol('app')
-const kResolvedInstance = Symbol('resolvedInstance')
+const InvalidFacadeAccessor = require('./exceptions/invalidFacadeAccessor');
+const RuntimeException = require('../exceptions/runtimeException');
+
 class Facade {
 
     static $app = null;
 
     static $resolvedInstance = {};
+
+    static $cached = true;
 
     static resolved($callback) {
         let $accessor = this.getFacadeAccessor();
@@ -15,7 +16,7 @@ class Facade {
             $callback(this.getFacadeRoot());
         }
 
-        this.$app.afterResolving($accessor, function($service) {
+        this.$app.afterResolving($accessor, function ($service) {
             $callback($service);
         });
     }
@@ -42,7 +43,10 @@ class Facade {
         }
 
         if (isset(this.$resolvedInstance[$name])) {
-            return this.$resolvedInstance[$name];
+            if (this.$cached) {
+                return this.$resolvedInstance[$name];
+            }
+            this.$app[$name]
         }
 
         if (this.$app) {
@@ -72,7 +76,7 @@ class Facade {
         if (!$instance) {
             throw new InvalidFacadeAccessor($target.getFacadeAccessor());
         }
-        return this.make($instance,$method);
+        return this.make($instance, $method);
     }
 
 }
