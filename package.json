@@ -1,6 +1,6 @@
 {
   "name": "@ostro/support",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Support for OstroJS",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -17,6 +17,10 @@
   "engineStrict": true,
   "keywords": [
     "ostro support",
+    "helper functions",
+    "nodejs helpers",
+    "ostrojs helpers",
+    "ostro",
     "support"
   ],
   "author": "amar",
