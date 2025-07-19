@@ -1,4 +1,4 @@
-var flatten = require("array-flatten");
+const { flatten } = require("array-flatten");
 
 function compose() {
     var handlers = [];
@@ -6,7 +6,7 @@ function compose() {
         handlers[_i] = arguments[_i];
     }
     var middleware = generate(handlers);
-    return function(req, res, done) { return middleware(null, req, res, done); };
+    return function (req, res, done) { return middleware(null, req, res, done); };
 }
 exports.compose = compose;
 
