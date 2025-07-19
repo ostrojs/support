@@ -1,6 +1,6 @@
 const Facade = require('./facade')
 const { Macroable } = require('../macro')
-const DateFactory = require('../datetime')
+const DateFactory = require('../dateTime')
 class DateTime extends Facade {
 
     static get DEFAULT_FACADE(){
