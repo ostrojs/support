@@ -244,6 +244,13 @@ class Collection extends Macroable.extend(CollectionInterface) {
 		return this.toJSON();
 	}
 
+	isArray() {
+		return Array.isArray(this.$items);
+	}
+	isJson() {
+		return this.$items && typeof this.$items === 'object' && !Array.isArray(this.$items);
+	}
+
 	serialize() {
 		let $value = this.all();
 		if (Array.isArray($value)) {
