@@ -41,7 +41,8 @@ class Manager extends Macroable {
     }
 
     getDriver(name) {
-        return this.resolve(name);
+        let $config = this.getDriverConfig(name);
+        return this.resolve(name,$config);
     }
 
     resolve($name, $config = {}) {
@@ -96,6 +97,10 @@ class Manager extends Macroable {
 
     getConfig(name,defaultValue) {
         return lodash.get(this.$config,`${this.$type}.${name}`, defaultValue)
+    }
+
+    getDriverConfig(name) {
+        return lodash.get(this.$config,`${this.$type}.drivers.${name}`);
     }
 
     __get(target, $method) {
