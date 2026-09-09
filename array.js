@@ -24,10 +24,14 @@ exports.unique = function (key) {
     return _.uniq(this, key)
 }
 
-exports.difference = function (arr) {
+exports.diff = function (arr) {
     return _.difference(this, arr)
 }
 
-exports.wrap = function (idnty) {
-    return _.wrap(this, idnty)
-}
+exports.wrap = function (value) {
+    if (value === null || value === undefined) {
+        return [];
+    }
+    return Array.isArray(value) ? value : [value];
+};
+

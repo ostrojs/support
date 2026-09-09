@@ -1,18 +1,22 @@
 const { Macroable } = require('./macro')
 const InvalidArgumentException = require('./exceptions/invalidArgumentException')
 const lodash = require('lodash')
+const StringHelper = require('./string')
+const { isset, is_null, method_exists } = require('./function')
+const MockContainer = require('./mockContainer')
+
 class Manager extends Macroable {
 
     constructor(application) {
         super()
-        let $container = application || app()
+        let $container = application || (typeof app === 'function' ? app() : new MockContainer());
         Object.defineProperties(this, {
             '$container': {
                 value: $container,
                 writable: true
             },
             '$config': {
-                value: $container.make('config'),
+                value: (typeof $container.make === 'function' ? $container.make('config') : {}) || {},
                 writable: true
             },
             '$customCreators': {
@@ -42,7 +46,7 @@ class Manager extends Macroable {
 
     getDriver(name) {
         let $config = this.getDriverConfig(name);
-        return this.resolve(name,$config);
+        return this.resolve(name, $config);
     }
 
     resolve($name, $config = {}) {
@@ -51,7 +55,7 @@ class Manager extends Macroable {
             return this.callCustomCreator($config, $name);
         }
 
-        let $driverMethod = 'create' + String.pascal($config['driver']) + 'Driver';
+        let $driverMethod = 'create' + StringHelper.pascal($config['driver']) + 'Driver';
 
         if (method_exists(this, $driverMethod)) {
             return this[$driverMethod]($config, $name);
@@ -61,7 +65,7 @@ class Manager extends Macroable {
     }
 
     callCustomCreator($config, $name) {
-        return this.$customCreators[$config['driver']].call(this, this.$container, $name, $config );
+        return this.$customCreators[$config['driver']].call(this, this.$container, $name, $config);
     }
 
     extend($driver, $callback) {
@@ -88,23 +92,23 @@ class Manager extends Macroable {
     }
 
     setDefaultDriver(name) {
-        lodash.set(this.$config,`${this.$type}.default`,name)
+        lodash.set(this.$config, `${this.$type}.default`, name)
     }
 
     getDefaultDriver() {
-        return lodash.get(this.$config,`${this.$type}.default`);
+        return lodash.get(this.$config, `${this.$type}.default`);
     }
 
-    getConfig(name,defaultValue) {
-        return lodash.get(this.$config,`${this.$type}.${name}`, defaultValue)
+    getConfig(name, defaultValue) {
+        return lodash.get(this.$config, `${this.$type}.${name}`, defaultValue)
     }
 
     getDriverConfig(name) {
-        return lodash.get(this.$config,`${this.$type}.drivers.${name}`);
+        return lodash.get(this.$config, `${this.$type}.drivers.${name}`);
     }
 
-    __get(target, $method) {
-        return this.make(target.driver(), $method);
+    __call(target, $method, $parameters) {
+        return target.driver()[$method](...$parameters);
     }
 }
 

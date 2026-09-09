@@ -1,4 +1,3 @@
-const Assistant = require('@ostro/console/application')
 class ServiceProvider {
     constructor($app){
         this.$app = $app
@@ -22,6 +21,7 @@ class ServiceProvider {
     commands($commands) {
         $commands = Array.isArray($commands) ? $commands : arguments
         if ($commands.length) {
+            const Assistant = require('@ostro/console/application');
             Assistant.addBootstraper(function($artisan) {
                 $artisan.resolveCommands($commands);
             });

@@ -1,10 +1,8 @@
 const nodePath = require('path');
+const path = nodePath;
 const fs = require('fs-extra')
 const util = require('util')
 const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-Date.format = function (format) {
-	return require('./facades/date').format(format)
-}
 
 exports.callsites = () => {
 	const _prepareStackTrace = Error.prepareStackTrace;
@@ -16,14 +14,7 @@ exports.callsites = () => {
 
 exports.path = nodePath
 
-module.__proto__.require = function ($path) {
-	var self = this;
-	if ($path.startsWith('~/')) {
-		$path = nodePath.resolve($path.replaceFirst('~/', ''))
-	}
-	return self.constructor._load($path, self);
 
-}
 
 exports.is_numeric = function (num) {
 	return !isNaN(parseFloat(num)) && isFinite(num);
@@ -41,8 +32,10 @@ exports.array_merge = function (array, array2) {
 	return array.concat(array2)
 }
 
-exports.unset = function (obj) {
-	delete obj
+exports.unset = function (target, key) {
+	if (target && key !== undefined) {
+		delete target[key]
+	}
 }
 
 exports.random = function (length) {
@@ -155,8 +148,8 @@ exports.strpos = function (text = '', search) {
 	return text.includes(search)
 }
 
-exports.call_user_func = function (fn, arguments) {
-	return fn(...arguments)
+exports.call_user_func = function (fn, ...args) {
+	return fn(...args)
 }
 
 exports.is_null = function (data) {
@@ -187,10 +180,10 @@ exports.is_string = function ($data) {
 	return typeof $data == 'string'
 }
 
-exports.isset = function (...arguments) {
+exports.isset = function (...args) {
 	let check = false
-	for (var i = 0; i < arguments.length; i++) {
-		check = typeof arguments[i] != 'undefined'
+	for (var i = 0; i < args.length; i++) {
+		check = typeof args[i] != 'undefined'
 		if (check == false) {
 			return false
 		}
@@ -210,6 +203,8 @@ exports.date = function (string) {
 exports.isFile = function ($path) {
 	return fs.lstat($path).then(stats => stats.isFile()).catch(err => false);
 }
+
+
 
 exports.is_file = function ($path) {
 	return this.isFile($path)
@@ -291,7 +286,8 @@ exports.mix = function (assetPath) {
 }
 
 exports.get_class_name = function ($class) {
-	return typeof $class == 'object' ? $class.constructor.name : (typeof $class == 'function' ? $class.name : undefined)
+	let name = typeof $class == 'object' ? $class?.constructor?.name : (typeof $class == 'function' ? $class.name : undefined);
+	return name ? name.replace(/^bound\s+/, '') : name;
 }
 
 exports.get_class = function ($class) {
@@ -438,3 +434,31 @@ exports.getCallerFunctionName = function (name) {
 
 	return callerFunctionName;
 }
+
+exports.hash_equals = function (knownString, userString) {
+	if (typeof knownString !== 'string' || typeof userString !== 'string') {
+		return false;
+	}
+	const crypto = require('crypto');
+	const a = Buffer.from(knownString);
+	const b = Buffer.from(userString);
+	if (a.length !== b.length) {
+		return false;
+	}
+	return crypto.timingSafeEqual(a, b);
+};
+
+exports.value = function (val, ...args) {
+	return typeof val === 'function' ? val(...args) : val;
+};
+
+exports.md5 = function (str) {
+	const crypto = require('crypto');
+	return crypto.createHash('md5').update(String(str)).digest('hex');
+};
+
+exports.sha1 = function (str) {
+	const crypto = require('crypto');
+	return crypto.createHash('sha1').update(String(str)).digest('hex');
+};
+

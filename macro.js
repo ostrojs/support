@@ -1,7 +1,7 @@
 let dontAllowMethodTypeOf = ['symbol']
-let dontAllowMethodMethod = ['inspect', 'then', 'catch', 'finaly']
+let dontAllowMethodMethod = ['inspect', 'then', 'catch', 'finaly', 'toJSON', 'toString', 'valueOf', 'asymmetricMatch', 'nodeType', '$$typeof']
+const { implement } = require('./function');
 const ProxyHandler = Object.create(null);
-const { implement } = require('@ostro/support/function')
 const kMacros = Symbol('macros')
 const kGetters = Symbol('getters')
 Object.defineProperties(ProxyHandler, {
@@ -34,24 +34,34 @@ Object.defineProperties(ProxyHandler, {
     'get': {
         value: function(target, key, receiver) {
 
-            if (this.has(target, key)) {
-                return Reflect.get(target, key, receiver)
+            if (Object.prototype.hasOwnProperty.call(target, key)) {
+                return target[key];
+            }
+
+            if (typeof key === 'symbol' || key in target || Reflect.has(target, key) || target[key] !== undefined) {
+                let val = target[key];
+                if (typeof val === 'function') {
+                    return val.bind(receiver || target);
+                }
+                return val;
             } else {
 
                 if (this.has(target, '__get')) {
                     if (dontAllowMethodTypeOf.indexOf(typeof key) == -1 && dontAllowMethodMethod.indexOf(key) == -1) {
-                        return (Reflect.get(target, '__get', receiver)).call(this, target, key)
+                        return (Reflect.get(target, '__get', target)).call(this, target, key, receiver)
                     }
                 } else if (this.has(target, '__call')) {
                     if (dontAllowMethodTypeOf.indexOf(typeof key) == -1 && dontAllowMethodMethod.indexOf(key) == -1) {
-                        let fn = (self, args) => {
-                            return (Reflect.get(target, '__call', receiver)).call(self, self, key, args)
-
-                        }
-                        return Macroable(fn)
+                        let targetObj = target;
+                        let targetReceiver = receiver;
+                        return function(...args) {
+                            let instance = targetReceiver || targetObj;
+                            let callFn = Reflect.get(targetObj, '__call', targetObj);
+                            return callFn.call(instance, instance, key, args);
+                        };
                     }
                 } else {
-                    return Reflect.get(target, key, receiver)
+                    return target[key];
                 }
             }
         }
