@@ -18,11 +18,7 @@ try {
 export default {
     moduleNameMapper: {
         "^@ostro/support/(.*)$": "<rootDir>/src/$1",
-        "^@ostro/support$": "<rootDir>/src/index.ts",
-        "^@ostro/http/(.*)$": "<rootDir>/../http/src/$1",
-        "^@ostro/http$": "<rootDir>/../http/src/index.ts",
-        "^@ostro/cache/(.*)$": "<rootDir>/../cache/src/$1",
-        "^@ostro/cache$": "<rootDir>/../cache/src/index.ts"
+        "^@ostro/support$": "<rootDir>/src/index.ts"
     },
     "testEnvironment": "node",
     "testMatch": [
