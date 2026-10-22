@@ -1,19 +1,19 @@
 {
     "name": "@ostro/support",
-    "version": "2.0.0-alpha.1",
+    "version": "2.0.0-alpha.2",
     "description": "Support for OstroJS",
     "main": "build/function.js",
-    "types": "build/function.d.ts",
+    "types": "build/types/function.d.ts",
     "files": [
         "build"
     ],
     "exports": {
         ".": {
-            "types": "./build/function.d.ts",
+            "types": "./build/types/function.d.ts",
             "default": "./build/function.js"
         },
         "./*": {
-            "types": "./build/*.d.ts",
+            "types": "./build/types/*.d.ts",
             "default": "./build/*.js"
         }
     },
@@ -24,7 +24,7 @@
         "clean": "rm -rf build coverage"
     },
     "dependencies": {
-        "@ostro/contracts": "^2.0.0-alpha.1",
+        "@ostro/contracts": "^2.0.0-alpha.2",
         "fs-extra": "^11.4.1",
         "lodash": "^4.17.21",
         "luxon": "^2.0.2"
