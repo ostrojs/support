@@ -18,7 +18,8 @@
     ],
     "types": [
       "node"
-    ]
+    ],
+    "declarationDir": "./build/types"
   },
   "include": [
     "src/**/*.ts"
