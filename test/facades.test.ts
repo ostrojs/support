@@ -1,3 +1,5 @@
+jest.mock('@ostro/cache/rateLimiter', () => ({ default: class MockRateLimiter {} }), { virtual: true });
+
 const _Facade = require('../src/facades/facade');
 const Facade = _Facade.default || _Facade;
 const _AppFacade = require('../src/facades/app');
