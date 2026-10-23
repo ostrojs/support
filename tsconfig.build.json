@@ -19,7 +19,7 @@
     "types": [
       "node"
     ],
-    "declarationDir": "./build/types",
+    "declarationDir": "./build/.types",
     "esModuleInterop": true
   },
   "include": [
