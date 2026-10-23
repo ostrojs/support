@@ -69,7 +69,11 @@ let loaded = false;
                     const customOutPath = path.resolve(cwd, userOutDir, relativePath);
                     const buildPath = path.resolve(cwd, 'build', relativePath);
                     const hasTs = Boolean(require.extensions && require.extensions['.ts']);
-                    if (fs.existsSync(directPath + '.js') || fs.existsSync(path.join(directPath, 'index.js')) || (fs.existsSync(directPath) && !fs.statSync(directPath).isDirectory())) {
+                    if (hasTs && (fs.existsSync(srcPath + '.ts') || fs.existsSync(path.join(srcPath, 'index.ts')))) {
+                        request = srcPath;
+                    } else if (hasTs && (fs.existsSync(directPath + '.ts') || fs.existsSync(path.join(directPath, 'index.ts')))) {
+                        request = directPath;
+                    } else if (fs.existsSync(directPath + '.js') || fs.existsSync(path.join(directPath, 'index.js')) || (fs.existsSync(directPath) && !fs.statSync(directPath).isDirectory())) {
                         request = directPath;
                     } else if (fs.existsSync(customOutPath + '.js') || fs.existsSync(path.join(customOutPath, 'index.js')) || (fs.existsSync(customOutPath) && !fs.statSync(customOutPath).isDirectory())) {
                         request = customOutPath;
@@ -77,10 +81,6 @@ let loaded = false;
                         request = buildPath;
                     } else if (fs.existsSync(srcPath + '.js') || fs.existsSync(path.join(srcPath, 'index.js')) || (fs.existsSync(srcPath) && !fs.statSync(srcPath).isDirectory())) {
                         request = srcPath;
-                    } else if (hasTs && (fs.existsSync(srcPath + '.ts') || fs.existsSync(path.join(srcPath, 'index.ts')))) {
-                        request = srcPath;
-                    } else if (hasTs && (fs.existsSync(directPath + '.ts') || fs.existsSync(path.join(directPath, 'index.ts')))) {
-                        request = directPath;
                     } else {
                         request = directPath;
                     }
