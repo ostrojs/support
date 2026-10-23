@@ -1,6 +1,6 @@
 {
     "name": "@ostro/support",
-    "version": "2.0.0-alpha.5",
+    "version": "2.0.0-alpha.6",
     "description": "Support for OstroJS",
     "main": "build/function.js",
     "types": "build/types/function.d.ts",
@@ -28,7 +28,7 @@
         "@ostro/contracts": "^2.0.0-alpha.5",
         "fs-extra": "^11.4.1",
         "lodash": "^4.17.21",
-        "luxon": "^2.0.2"
+        "luxon": "^3.5.0"
     },
     "engines": {
         "node": ">=18.0.0"
