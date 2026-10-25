@@ -1,14 +1,12 @@
 import lodash from 'lodash';
-import { Macroable } from './macro';
 import CollectionInterface from '@ostro/contracts/collection/collect';
-import type { ICollection } from '@ostro/contracts/collection/collect';
 
 const kUpdateData: unique symbol = Symbol('update');
 
 /**
  * Class Collection.
  */
-class Collection<T = any> extends Macroable.extend(CollectionInterface) implements ICollection<T> {
+class Collection<T = any> extends CollectionInterface {
 	$items: T[];
 	length: number;
 
@@ -387,16 +385,16 @@ class Collection<T = any> extends Macroable.extend(CollectionInterface) implemen
 	 * push method.
 	 * @returns {any}
 	 */
-	push() {
-		return this[kUpdateData](lodash.concat(this.$items, ...arguments))
+	push(...items: any[]) {
+		return this[kUpdateData](lodash.concat(this.$items, ...items))
 	}
 
 	/**
 	 * prepend method.
 	 * @returns {any}
 	 */
-	prepend() {
-		return this[kUpdateData](lodash.concat(...arguments, this.$items))
+	prepend(...items: any[]) {
+		return this[kUpdateData](lodash.concat(...items, this.$items))
 	}
 
 	/**
@@ -564,7 +562,8 @@ class Collection<T = any> extends Macroable.extend(CollectionInterface) implemen
 		};
 	}
 	[kUpdateData](data: any) {
-		return new (this.constructor as any)(data)
+		const Ctor: any = this.constructor;
+		return new Ctor(data);
 	}
 
 	/**

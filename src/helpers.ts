@@ -2,8 +2,20 @@ import * as functions from './function';
 import * as arrays from './array';
 import * as strings from './string';
 import './object';
-import * as path from 'path';
-import * as fs from 'fs';
+import * as path from 'node:path';
+import * as fs from 'node:fs';
+
+declare global {
+    interface StringConstructor {
+        [key: string]: any;
+    }
+}
+
+interface NodeInternalModule {
+    _resolveFilename: (request: string, parent: any, isMain: boolean, options: any) => string;
+    _load?: (request: string, parent: any, isMain: boolean) => any;
+    _ostroPathHookInstalled?: boolean;
+}
 
 let loaded = false;
 
@@ -11,11 +23,11 @@ let loaded = false;
     if (!loaded) {
         loaded = true;
         Object.keys(functions).forEach(helperKey => {
-            (global as any)[helperKey] = (functions as any)[helperKey];
+            (global as typeof globalThis)[helperKey] = (functions as Record<string, any>)[helperKey];
         });
         Object.keys(arrays).forEach(arraykey => {
             Object.defineProperty(Array.prototype, arraykey, {
-                value: (arrays as any)[arraykey],
+                value: (arrays as Record<string, any>)[arraykey],
                 enumerable: false,
                 writable: true,
                 configurable: true
@@ -23,9 +35,9 @@ let loaded = false;
         });
         const nativeStringProtoProps = new Set(Object.getOwnPropertyNames(String.prototype));
         Object.keys(strings).forEach(strKey => {
-            const strFn = (strings as any)[strKey];
-            (String as any)[strKey] = strFn;
-            if (!nativeStringProtoProps.has(strKey)) {
+            const strFn = (strings as Record<string, any>)[strKey];
+            String[strKey] = strFn;
+            if (!nativeStringProtoProps.has(strKey) && typeof strFn === 'function') {
                 Object.defineProperty(String.prototype, strKey, {
                     value: function (this: any, ...args: any[]) {
                         return strFn(this, ...args);
@@ -37,14 +49,14 @@ let loaded = false;
             }
         });
 
-        const Module = require('module');
-        if (Module && Module._resolveFilename && !(Module as any)._ostroPathHookInstalled) {
-            (Module as any)._ostroPathHookInstalled = true;
+        const Module = require('node:module') as NodeInternalModule;
+        if (Module && Module._resolveFilename && !Module._ostroPathHookInstalled) {
+            Module._ostroPathHookInstalled = true;
             const originalResolveFilename = Module._resolveFilename;
             Module._resolveFilename = function (request: string, parent: any, isMain: boolean, options: any) {
                 if (typeof request === 'string' && request.startsWith('~/')) {
                     const relativePath = request.slice(2);
-                    const cwd = (global as any).$basePath || process.cwd();
+                    const cwd = (global as typeof globalThis).$basePath || process.cwd();
                     const directPath = path.resolve(cwd, relativePath);
                     const srcPath = path.resolve(cwd, 'src', relativePath);
                     let userOutDir = process.env.OSTRO_BUILD_DIR || '';
@@ -104,7 +116,7 @@ let loaded = false;
                             if (key !== 'default' && key !== '__esModule' && !(key in def)) {
                                 try {
                                     def[key] = exports[key];
-                                } catch (_) {}
+                                } catch (_) { }
                             }
                         }
                     }
@@ -116,4 +128,4 @@ let loaded = false;
     }
 })();
 
-export {};
+export { };

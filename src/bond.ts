@@ -54,7 +54,8 @@ function bond<T extends Record<string, any>>(
 
         const descriptor = Reflect.getOwnPropertyDescriptor(object, key);
         if (descriptor && typeof descriptor.value === 'function') {
-            self[key as keyof T] = (self[key as keyof T] as any).bind(self);
+            const fn = descriptor.value as Function;
+            self[key as keyof T] = fn.bind(self) as T[keyof T];
         }
     }
     if (bond != null) {

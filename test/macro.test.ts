@@ -1,6 +1,6 @@
-const _MockContainer = require('../src/mockContainer');
-const MockContainer = _MockContainer.default || _MockContainer;
-const { Macroable } = require('../src/macro');
+import { describe, test, expect } from '@jest/globals';
+import MockContainer from '../src/mockContainer';
+import { Macroable } from '../src/macro';
 
 describe('MockContainer and Macroable', () => {
     describe('MockContainer', () => {

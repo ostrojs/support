@@ -1,5 +1,5 @@
-const _Collection = require('../src/collection');
-const Collection = _Collection.default || _Collection;
+import { describe, test, expect } from '@jest/globals';
+import Collection from '../src/collection';
 
 describe('Collection', () => {
     test('make, collect, constructor, length, iterator', () => {

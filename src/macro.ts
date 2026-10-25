@@ -15,8 +15,8 @@ export interface ProxyHandlerType extends ProxyHandler<any> {
 }
 
 const ProxyHandler: ProxyHandlerType = Object.create(null);
-const kMacros: unique symbol = Symbol('macros');
-const kGetters: unique symbol = Symbol('getters');
+const macroStorage: WeakMap<object, Record<string, any>> = new WeakMap();
+const getterStorage: WeakMap<object, Record<string, any>> = new WeakMap();
 
 Object.defineProperties(ProxyHandler, {
     'construct': {
@@ -123,7 +123,7 @@ Object.defineProperties(ProxyHandler, {
 
 export interface MacroableConstructor {
     new (...args: any[]): any;
-    <T = any>(clazz?: T, handler?: any): T;
+    <T = any>(clazz?: T, handler?: any): T & { [key: string]: any };
     extend(...args: any[]): any;
     implement(clazz: any, ...clazzs: any[]): any;
     macro(name: string, callback: Function): void;
@@ -145,13 +145,13 @@ export interface MacroableConstructor {
  * @param handler - Optional custom proxy handler.
  * @returns Proxied class or instance.
  */
-const Macroable: MacroableConstructor = function Macroable(clazz?: any, handler: any = ProxyHandler): any {
-    const target = clazz || (this as any);
+const Macroable: MacroableConstructor = function Macroable(this: unknown, clazz?: any, handler: any = ProxyHandler): any {
+    const target = clazz || this;
     if (typeof target === 'function' && typeof target.macro !== 'function') {
         macro(target);
     }
     return new Proxy(target, handler);
-} as any;
+} as any as MacroableConstructor;
 
 macro(Macroable);
 
@@ -174,20 +174,30 @@ Macroable.implement = function (clazz: any, ...clazzs: any[]): any {
 function macro(clazz: any): void {
     Object.defineProperty(clazz, '$_macros', {
         get: function () {
-            return this[kMacros] = this[kMacros] || {};
+            let m = macroStorage.get(this);
+            if (!m) {
+                m = {};
+                macroStorage.set(this, m);
+            }
+            return m;
         },
         set: function (value) {
-            this[kMacros] = value;
+            macroStorage.set(this, value);
         },
         configurable: true
     });
 
     Object.defineProperty(clazz, '$_getters', {
         get: function () {
-            return this[kGetters] = this[kGetters] || {};
+            let g = getterStorage.get(this);
+            if (!g) {
+                g = {};
+                getterStorage.set(this, g);
+            }
+            return g;
         },
         set: function (value) {
-            this[kGetters] = value;
+            getterStorage.set(this, value);
         },
         configurable: true
     });

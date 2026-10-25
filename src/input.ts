@@ -1,13 +1,11 @@
 import InputContracts from '@ostro/contracts/support/input';
 import { get as lodashGet } from 'lodash';
 
-const kInput: unique symbol = Symbol('input');
-
 /**
  * Class Input.
  */
 class Input extends InputContracts {
-    [kInput]: any;
+    #input: any;
 
     /**
      * Create a new instance.
@@ -15,7 +13,7 @@ class Input extends InputContracts {
      */
     constructor(objects: any) {
         super();
-        this[kInput] = objects;
+        this.#input = objects;
     }
 
     /**
@@ -26,7 +24,7 @@ class Input extends InputContracts {
      * @returns The resolved input value or default.
      */
     public get<T = any>(key: string, defaultValue: T | null = null): T {
-        return lodashGet(this[kInput], key) || defaultValue;
+        return lodashGet(this.#input, key) || defaultValue;
     }
 }
 

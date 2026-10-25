@@ -64,7 +64,7 @@ class DateTime extends Date {
         super(date);
         const ctor = this.constructor as typeof DateTime;
 
-        if (date instanceof (this.constructor as any) || date instanceof LuxonDateTime) {
+        if (date instanceof DateTime || date instanceof LuxonDateTime) {
             this.DATE_TIME = date;
         }
         if (date instanceof Date) {
@@ -145,7 +145,7 @@ class DateTime extends Date {
      */
     public add(date: any): any {
         let diff: any = {};
-        if (date instanceof (this.constructor as any)) {
+        if (date instanceof DateTime) {
             diff = date.DATE_TIME.diff(this.DATE_TIME);
         }
         if (date instanceof LuxonDateTime) {
@@ -233,7 +233,7 @@ class DateTime extends Date {
     }
 
     public newDate(date: any): any {
-        const ctor = this.constructor as any;
+        const ctor: any = this.constructor;
         return new ctor(date);
     }
 
