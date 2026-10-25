@@ -48,7 +48,7 @@ const _RuntimeException = require('../src/exceptions/runtimeException');
 const RuntimeException = _RuntimeException.default || _RuntimeException;
 
 describe('Facades', () => {
-    let mockApp;
+    let mockApp: any;
 
     beforeEach(() => {
         mockApp = {
