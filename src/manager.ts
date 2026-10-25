@@ -2,17 +2,19 @@ import { Macroable } from './macro';
 import InvalidArgumentException from './exceptions/invalidArgumentException';
 import lodash from 'lodash';
 import * as StringHelper from './string';
-import { isset, is_null, method_exists } from './function';
+import { is_null, isset, method_exists } from './function';
 import MockContainer from './mockContainer';
+import type { IConfig } from '@ostro/contracts/config/repository';
 
 /**
  * Class Manager.
  */
 class Manager extends Macroable {
-    declare public $container: any;
-    declare public $config: any;
-    declare public $customCreators: Record<string, Function>;
-    declare public $drivers: Record<string, any>;
+    protected $container: any;
+    protected $config: IConfig | Record<string, any>;
+    protected $customCreators: Record<string, Function>;
+    protected $drivers: Record<string, any>;
+    declare public $type: string;
 
     /**
      * Create a new instance.
@@ -20,14 +22,14 @@ class Manager extends Macroable {
      */
     constructor(application?: any) {
         super();
-        const $container = application || (typeof (globalThis as any).app === 'function' ? (globalThis as any).app() : new MockContainer());
+        const $container = application || (typeof (globalThis as typeof globalThis).app === 'function' ? (globalThis as typeof globalThis).app() : new MockContainer());
         Object.defineProperties(this, {
             '$container': {
                 value: $container,
                 writable: true
             },
             '$config': {
-                value: (typeof $container.make === 'function' ? $container.make('config') : {}) || {},
+                value: (typeof $container.make === 'function' ? ($container.make('config') as IConfig) : {}) || {},
                 writable: true
             },
             '$customCreators': {
@@ -47,7 +49,7 @@ class Manager extends Macroable {
      * @param $driver - Driver name.
      * @returns Driver instance.
      */
-    public driver($driver: any = null): any {
+    public driver($driver: string | null = null): any {
         $driver = $driver || this.getDefaultDriver();
 
         if (is_null($driver)) {
@@ -79,7 +81,7 @@ class Manager extends Macroable {
      * @param $config - Driver configuration.
      * @returns Resolved driver instance.
      */
-    public resolve($name: string, $config: Record<string, any> = {}): any {
+    protected resolve($name: string, $config: any = {}): any {
         if (isset(this.$customCreators[$config['driver']])) {
             return this.callCustomCreator($config, $name);
         }
@@ -87,7 +89,7 @@ class Manager extends Macroable {
         const $driverMethod = 'create' + StringHelper.pascal($config['driver']) + 'Driver';
 
         if (method_exists(this, $driverMethod)) {
-            return (this as any)[$driverMethod]($config, $name);
+            return (this as Record<string, Function>)[$driverMethod]($config, $name);
         }
 
         throw new InvalidArgumentException("Driver [" + $config['driver'] + "] not supported.");
@@ -100,7 +102,7 @@ class Manager extends Macroable {
      * @param $name - Driver name.
      * @returns Driver instance.
      */
-    public callCustomCreator($config: Record<string, any>, $name: string): any {
+    protected callCustomCreator($config: any, $name: string): any {
         return this.$customCreators[$config['driver']].call(this, this.$container, $name, $config);
     }
 
@@ -111,7 +113,7 @@ class Manager extends Macroable {
      * @param $callback - Creator callback.
      * @returns Current manager instance.
      */
-    public extend($driver: any, $callback: Function): this {
+    public extend($driver: string, $callback: Function): this {
         this.$customCreators[$driver] = $callback;
         return this;
     }
@@ -169,7 +171,7 @@ class Manager extends Macroable {
      *
      * @returns Default driver name.
      */
-    public getDefaultDriver(): any {
+    public getDefaultDriver(): string {
         return lodash.get(this.$config, `${this.$type}.default`);
     }
 
@@ -202,7 +204,7 @@ class Manager extends Macroable {
      * @param $parameters - Call parameters.
      * @returns Result of method call on default driver.
      */
-    public __call(target: Record<string, any>, $method: string, $parameters: any[]): any {
+    public __call(target: any, $method: string, $parameters: any[]): any {
         return target.driver()[$method](...$parameters);
     }
 }

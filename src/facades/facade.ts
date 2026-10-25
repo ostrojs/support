@@ -8,6 +8,8 @@ import { ProxyHandler } from '../macro';
  */
 class Facade {
 
+    static [key: string]: any;
+
     static $app = null;
 
     static $resolvedInstance = {};
@@ -51,8 +53,8 @@ class Facade {
      * @static
      * @returns {any}
      */
-    static getFacadeRoot() {
-        return this.resolveFacadeInstance(this.getFacadeAccessor());
+    static getFacadeRoot<T = any>(): T {
+        return this.resolveFacadeInstance<T>(this.getFacadeAccessor());
     }
 
     /**
@@ -70,20 +72,21 @@ class Facade {
      * @param {*} $name
      * @returns {any}
      */
-    static resolveFacadeInstance($name: string) {
-        if (typeof $name == 'object') {
-            return $name;
+    static resolveFacadeInstance<T = any>($name: string): T {
+        const accessor = $name as string;
+        if (typeof $name == 'object' && $name !== null) {
+            return $name as T;
         }
 
-        if (isset(this.$resolvedInstance[$name])) {
+        if (isset((this.$resolvedInstance as Record<string, any>)[accessor])) {
             if (this.$cached) {
-                return this.$resolvedInstance[$name];
+                return (this.$resolvedInstance as Record<string, any>)[accessor];
             }
-            return this.$app[$name];
+            return this.$app[accessor];
         }
 
         if (this.$app) {
-            return this.$resolvedInstance[$name] = this.$app[$name];
+            return (this.$resolvedInstance as Record<string, any>)[accessor] = this.$app[accessor];
         }
     }
 

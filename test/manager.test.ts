@@ -1,5 +1,5 @@
-const _Manager = require('../src/manager');
-const Manager = _Manager.default || _Manager;
+import { describe, test, expect } from "@jest/globals";
+const Manager = require('../src/manager').default;
 const _InvalidArgumentException = require('../src/exceptions/invalidArgumentException');
 const InvalidArgumentException = _InvalidArgumentException.default || _InvalidArgumentException;
 
@@ -46,7 +46,7 @@ describe('Manager', () => {
             })
         };
         const mgr = new TestManager(customContainer);
-        const drv1 = mgr.driver();
+                const drv1 = mgr.driver();
         expect(drv1.name).toBe('array');
 
         // cached driver returned

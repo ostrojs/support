@@ -1,3 +1,4 @@
+import { describe, test, expect, jest } from "@jest/globals";
 import ServiceProvider from '../src/serviceProvider';
 import DeferrableProvider from '../src/deferrableProvider';
 import AggregateServiceProvider from '../src/aggregateServiceProvider';

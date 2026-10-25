@@ -1,3 +1,4 @@
+import { describe, test, expect } from "@jest/globals";
 import '../src/object';
 import Env from '../src/env';
 import Input from '../src/input';

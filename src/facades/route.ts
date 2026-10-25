@@ -16,51 +16,51 @@ class Route extends Facade {
     }
 
     static get(uri: string, action?: any): any {
-        return (this.getFacadeRoot() as any).get(uri, action);
+        return this.getFacadeRoot().get(uri, action);
     }
 
     static post(uri: string, action?: any): any {
-        return (this.getFacadeRoot() as any).post(uri, action);
+        return this.getFacadeRoot().post(uri, action);
     }
 
     static put(uri: string, action?: any): any {
-        return (this.getFacadeRoot() as any).put(uri, action);
+        return this.getFacadeRoot().put(uri, action);
     }
 
     static patch(uri: string, action?: any): any {
-        return (this.getFacadeRoot() as any).patch(uri, action);
+        return this.getFacadeRoot().patch(uri, action);
     }
 
     static delete(uri: string, action?: any): any {
-        return (this.getFacadeRoot() as any).delete(uri, action);
+        return this.getFacadeRoot().delete(uri, action);
     }
 
     static options(uri: string, action?: any): any {
-        return (this.getFacadeRoot() as any).options(uri, action);
+        return this.getFacadeRoot().options(uri, action);
     }
 
     static any(uri: string, action?: any): any {
-        return (this.getFacadeRoot() as any).any(uri, action);
+        return this.getFacadeRoot().any(uri, action);
     }
 
     static match(methods: string[], uri: string, action?: any): any {
-        return (this.getFacadeRoot() as any).match(methods, uri, action);
+        return this.getFacadeRoot().match(methods, uri, action);
     }
 
     static prefix(prefix: string): any {
-        return (this.getFacadeRoot() as any).prefix(prefix);
+        return this.getFacadeRoot().prefix(prefix);
     }
 
     static middleware(...middlewares: any[]): any {
-        return (this.getFacadeRoot() as any).middleware(...middlewares);
+        return this.getFacadeRoot().middleware(...middlewares);
     }
 
     static namespace(namespace: string): any {
-        return (this.getFacadeRoot() as any).namespace(namespace);
+        return this.getFacadeRoot().namespace(namespace);
     }
 
     static group(callback: Function | string): any {
-        return (this.getFacadeRoot() as any).group(callback);
+        return this.getFacadeRoot().group(callback);
     }
 }
 export default Macroable(Route);
