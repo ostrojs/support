@@ -29,27 +29,27 @@ class Schema extends Facade {
     }
 
     static create(table: string, callback: (table: Blueprint) => void): Promise<any> {
-        return (this.getFacadeRoot() as any).create(table, callback);
+        return this.getFacadeRoot().create(table, callback);
     }
 
     static drop(table: string): Promise<any> {
-        return (this.getFacadeRoot() as any).drop(table);
+        return this.getFacadeRoot().drop(table);
     }
 
     static dropIfExists(table: string): Promise<any> {
-        return (this.getFacadeRoot() as any).dropIfExists(table);
+        return this.getFacadeRoot().dropIfExists(table);
     }
 
     static hasTable(table: string): Promise<boolean> {
-        return (this.getFacadeRoot() as any).hasTable(table);
+        return this.getFacadeRoot().hasTable(table);
     }
 
     static hasColumn(table: string, column: string): Promise<boolean> {
-        return (this.getFacadeRoot() as any).hasColumn(table, column);
+        return this.getFacadeRoot().hasColumn(table, column);
     }
 
     static table(table: string, callback: (table: Blueprint) => void): Promise<any> {
-        return (this.getFacadeRoot() as any).table(table, callback);
+        return this.getFacadeRoot().table(table, callback);
     }
 }
 export default Macroable(Schema);

@@ -13,7 +13,7 @@ export function filter<T extends Record<string, any>>(obj: T, cb?: (val: any) =>
     for (const key of keys) {
         const data = typeof cb == 'function' ? cb(obj[key]) : obj[key];
         if (!data) {
-            delete (obj as any)[key];
+            delete (obj as Record<string, unknown>)[key];
         }
     }
     return obj;

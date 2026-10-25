@@ -69,7 +69,7 @@ export const upperFirst = (...arg: any[]): string => lodash.upperFirst(...arg);
 
 export const words = (...arg: any[]): string[] => lodash.words(...arg);
 
-export const replace = (...arg: any[]): string => (lodash.replace as any)(...arg);
+export const replace = (string: string, pattern: string | RegExp, replacement: string | ((...args: any[]) => string)): string => lodash.replace(string, pattern, replacement);
 
 export function replaceFirst(string: any = '', pattern: string | RegExp = '', replacement: any = ''): string {
     const pStr = typeof pattern === 'string' ? pattern.replace(/\\/ig, '\\\\') : pattern;
@@ -101,7 +101,7 @@ export function replaceArray(string: any = '', find: (string | RegExp)[] = [], r
 export function replaceAllArray(string: any = '', find: (string | RegExp)[] = [], replaceWith: any[] = []): string {
     let str = String(string);
     for (let i = 0; i < find.length; i++) {
-        str = (str as any).replaceAll(find[i], replaceWith[i]);
+        str = (str as string).replaceAll(find[i], replaceWith[i]);
     }
     return str;
 }

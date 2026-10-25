@@ -1,4 +1,4 @@
-import querystring from 'querystring';
+import querystring from 'node:querystring';
 
 export interface ParsedDatabaseConfiguration {
     driver: string | null;

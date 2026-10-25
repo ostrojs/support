@@ -1,13 +1,11 @@
 import ErrorBagContract from '@ostro/contracts/support/errorBag';
 import { get as lodashGet, set as lodashSet } from 'lodash';
 
-const kErrors: unique symbol = Symbol('errors');
-
 /**
  * Class ErrorBag.
  */
 class ErrorBag extends ErrorBagContract {
-    [kErrors]: any;
+    #errors: any;
 
     /**
      * Create a new instance.
@@ -15,7 +13,7 @@ class ErrorBag extends ErrorBagContract {
      */
     constructor(objects: any) {
         super();
-        this[kErrors] = objects;
+        this.#errors = objects;
     }
 
     /**
@@ -25,7 +23,7 @@ class ErrorBag extends ErrorBagContract {
      * @returns The updated target object.
      */
     public add(key: string, value: any): any {
-        return lodashSet(this[kErrors], key, value);
+        return lodashSet(this.#errors, key, value);
     }
 
     /**
@@ -35,7 +33,7 @@ class ErrorBag extends ErrorBagContract {
      * @returns The resolved error(s) or default.
      */
     public get(key: string, defaultValue: any = null): any {
-        return lodashGet(this[kErrors], key) || defaultValue;
+        return lodashGet(this.#errors, key) || defaultValue;
     }
 
     /**

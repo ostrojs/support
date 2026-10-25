@@ -1,7 +1,7 @@
-import nodePath from 'path';
+import nodePath from 'node:path';
 import fs from 'fs-extra';
-import util from 'util';
-import crypto from 'crypto';
+import util from 'node:util';
+import crypto from 'node:crypto';
 
 // Framework global registered by OstroJS at boot time
 declare const app: (abstract?: any) => any;
@@ -13,7 +13,7 @@ export const path = nodePath;
 export const callsites = (): any => {
 	const _prepareStackTrace = Error.prepareStackTrace;
 	Error.prepareStackTrace = (_, stack) => stack;
-	const stack = (new Error().stack as any).slice(1);
+	const stack = (new Error().stack as string).slice(1);
 	Error.prepareStackTrace = _prepareStackTrace;
 	return stack;
 };
@@ -128,7 +128,7 @@ export function clone<T = any>(obj: T): T {
 	let keys_ = Object.getOwnPropertyNames(obj);
 	for (let i = 0; i < keys_.length; i++) {
 		let key = keys_[i];
-		let value = (obj as any)[key];
+		let value = (obj as Record<string, unknown>)[key];
 		result[key] = value;
 	}
 
@@ -326,7 +326,70 @@ export function mergePath(...args: string[]): string {
 		}
 	}, ''));
 }
+export type AnyConstructor = new (...args: any[]) => any;
 
+export type MergeConstructors<TBase, TMixins extends any[]> =
+	(TMixins extends [infer M1, ...infer Rest]
+		? (new (...args: any[]) => (TBase extends new (...args: any[]) => infer B ? B : {}) & (M1 extends new (...args: any[]) => infer M ? M : {})) & TBase & M1 & MergeConstructors<TBase, Rest>
+		: TBase);
+
+export function implement<TBase extends AnyConstructor, TMixin1 extends AnyConstructor>(
+	base: TBase,
+	mixin1: TMixin1
+): (new (...args: any[]) => InstanceType<TBase> & InstanceType<TMixin1>) & TBase & TMixin1;
+
+export function implement<TBase extends AnyConstructor, TMixin1 extends AnyConstructor, TMixin2 extends AnyConstructor>(
+	base: TBase,
+	mixin1: TMixin1,
+	mixin2: TMixin2
+): (new (...args: any[]) => InstanceType<TBase> & InstanceType<TMixin1> & InstanceType<TMixin2>) & TBase & TMixin1 & TMixin2;
+
+export function implement<TBase extends AnyConstructor, TMixin1 extends AnyConstructor, TMixin2 extends AnyConstructor, TMixin3 extends AnyConstructor>(
+	base: TBase,
+	mixin1: TMixin1,
+	mixin2: TMixin2,
+	mixin3: TMixin3
+): (new (...args: any[]) => InstanceType<TBase> & InstanceType<TMixin1> & InstanceType<TMixin2> & InstanceType<TMixin3>) & TBase & TMixin1 & TMixin2 & TMixin3;
+
+export function implement<TBase extends AnyConstructor, TMixin1 extends AnyConstructor, TMixin2 extends AnyConstructor, TMixin3 extends AnyConstructor, TMixin4 extends AnyConstructor>(
+	base: TBase,
+	mixin1: TMixin1,
+	mixin2: TMixin2,
+	mixin3: TMixin3,
+	mixin4: TMixin4
+): (new (...args: any[]) => InstanceType<TBase> & InstanceType<TMixin1> & InstanceType<TMixin2> & InstanceType<TMixin3> & InstanceType<TMixin4>) & TBase & TMixin1 & TMixin2 & TMixin3 & TMixin4;
+
+export function implement<TBase extends AnyConstructor, TMixin1 extends AnyConstructor, TMixin2 extends AnyConstructor, TMixin3 extends AnyConstructor, TMixin4 extends AnyConstructor, TMixin5 extends AnyConstructor>(
+	base: TBase,
+	mixin1: TMixin1,
+	mixin2: TMixin2,
+	mixin3: TMixin3,
+	mixin4: TMixin4,
+	mixin5: TMixin5
+): (new (...args: any[]) => InstanceType<TBase> & InstanceType<TMixin1> & InstanceType<TMixin2> & InstanceType<TMixin3> & InstanceType<TMixin4> & InstanceType<TMixin5>) & TBase & TMixin1 & TMixin2 & TMixin3 & TMixin4 & TMixin5;
+
+export function implement<TBase extends AnyConstructor, TMixin1 extends AnyConstructor, TMixin2 extends AnyConstructor, TMixin3 extends AnyConstructor, TMixin4 extends AnyConstructor, TMixin5 extends AnyConstructor, TMixin6 extends AnyConstructor>(
+	base: TBase,
+	mixin1: TMixin1,
+	mixin2: TMixin2,
+	mixin3: TMixin3,
+	mixin4: TMixin4,
+	mixin5: TMixin5,
+	mixin6: TMixin6
+): (new (...args: any[]) => InstanceType<TBase> & InstanceType<TMixin1> & InstanceType<TMixin2> & InstanceType<TMixin3> & InstanceType<TMixin4> & InstanceType<TMixin5> & InstanceType<TMixin6>) & TBase & TMixin1 & TMixin2 & TMixin3 & TMixin4 & TMixin5 & TMixin6;
+
+export function implement<TBase extends AnyConstructor, TMixin1 extends AnyConstructor, TMixin2 extends AnyConstructor, TMixin3 extends AnyConstructor, TMixin4 extends AnyConstructor, TMixin5 extends AnyConstructor, TMixin6 extends AnyConstructor, TMixin7 extends AnyConstructor>(
+	base: TBase,
+	mixin1: TMixin1,
+	mixin2: TMixin2,
+	mixin3: TMixin3,
+	mixin4: TMixin4,
+	mixin5: TMixin5,
+	mixin6: TMixin6,
+	mixin7: TMixin7
+): (new (...args: any[]) => InstanceType<TBase> & InstanceType<TMixin1> & InstanceType<TMixin2> & InstanceType<TMixin3> & InstanceType<TMixin4> & InstanceType<TMixin5> & InstanceType<TMixin6> & InstanceType<TMixin7>) & TBase & TMixin1 & TMixin2 & TMixin3 & TMixin4 & TMixin5 & TMixin6 & TMixin7;
+
+export function implement(base: any, ...mixins: any[]): any;
 export function implement(base: any, ...mixins: any[]): any {
 	let aggregate = class __Aggregate extends base {
 		/**
@@ -346,10 +409,9 @@ export function implement(base: any, ...mixins: any[]): any {
 	};
 
 	let copyProps = (target: any, source: any) => {
-		Object.getOwnPropertyNames(source)
-			.concat(Object.getOwnPropertySymbols(source) as any[])
-			.forEach((prop) => {
-				if (typeof prop == 'string' && prop.match(/^(?:initializer|prototype|arguments|caller|name|bind|call|apply|toString|length)$/)) {
+		const props: (string | symbol)[] = [...Object.getOwnPropertyNames(source), ...Object.getOwnPropertySymbols(source)];
+		props.forEach((prop) => {
+				if (typeof prop == 'string' && prop.match(/^(?:default|initializer|prototype|arguments|caller|name|bind|call|apply|toString|length)$/)) {
 					return;
 				} else {
 					Object.defineProperty(target, prop, Object.getOwnPropertyDescriptor(source, prop)!);

@@ -1,13 +1,11 @@
 import MessageBagContracts from '@ostro/contracts/support/messageBag';
 import { get as lodashGet, set as lodashSet } from 'lodash';
 
-const kMessage: unique symbol = Symbol('message');
-
 /**
  * Class MessageBag.
  */
 class MessageBag extends MessageBagContracts {
-    [kMessage]: any;
+    #message: any;
 
     /**
      * Create a new instance.
@@ -15,7 +13,7 @@ class MessageBag extends MessageBagContracts {
      */
     constructor(objects: any) {
         super();
-        this[kMessage] = objects;
+        this.#message = objects;
     }
 
     /**
@@ -25,7 +23,7 @@ class MessageBag extends MessageBagContracts {
      * @returns The updated message container.
      */
     public add(key: string, value: any): any {
-        return lodashSet(this[kMessage], key, value);
+        return lodashSet(this.#message, key, value);
     }
 
     /**
@@ -35,7 +33,7 @@ class MessageBag extends MessageBagContracts {
      * @returns The resolved message(s) or default.
      */
     public get(key: string, defaultValue: any = null): any {
-        return lodashGet(this[kMessage], key) || defaultValue;
+        return lodashGet(this.#message, key) || defaultValue;
     }
 
     /**
@@ -63,7 +61,7 @@ class MessageBag extends MessageBagContracts {
      * @returns The raw messages container.
      */
     public all(): any {
-        return this[kMessage];
+        return this.#message;
     }
 }
 

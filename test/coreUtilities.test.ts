@@ -1,3 +1,4 @@
+import { describe, test, expect } from '@jest/globals';
 import bond from '../src/bond';
 import { compose, errors } from '../src/compose';
 import ConfigurationUrlParser from '../src/configurationUrlParser';
@@ -39,7 +40,7 @@ describe('bond', () => {
         const { childMethod, otherMethod } = instance;
         expect(childMethod()).toBe('val');
         expect(otherMethod()).toBe('other');
-        expect((instance as any).extra).toBe(123);
+        expect((instance as unknown as { extra: number }).extra).toBe(123);
     });
 
     test('binds with exclude filter (string and regex)', () => {
@@ -357,10 +358,11 @@ describe('Str (string.js)', () => {
         }
 
         // Test with global.$basePath set
-        (global as any).$basePath = path.resolve(process.cwd());
+        const globalScope = globalThis as unknown as { $basePath?: string };
+        globalScope.$basePath = path.resolve(process.cwd());
         const resolvedWithGlobal = Module._resolveFilename('~/package.json', module, false);
         expect(resolvedWithGlobal).toBe(path.resolve(process.cwd(), 'package.json'));
-        delete (global as any).$basePath;
+        delete globalScope.$basePath;
 
         // Test non-existent path throws
         expect(() => Module._resolveFilename('~/non-existent-xyz', module, false)).toThrow(/non-existent-xyz/);

@@ -1,29 +1,26 @@
 import ServiceProvider from './serviceProvider';
 
-const kProvders: unique symbol = Symbol('providers');
-const kInstances: unique symbol = Symbol('instances');
-
 /**
  * Class AggregateServiceProvider.
  */
 class AggregateServiceProvider extends ServiceProvider {
-    [kProvders]?: any[];
-    [kInstances]?: any[];
+    #providers?: any[];
+    #instances?: any[];
 
     public get $providers(): any[] {
-        return this[kProvders] = this[kProvders] || [];
+        return this.#providers = this.#providers || [];
     }
 
     public get $instances(): any[] {
-        return this[kInstances] = this[kInstances] || [];
+        return this.#instances = this.#instances || [];
     }
 
     public set $providers(value: any[]) {
-        this[kProvders] = value;
+        this.#providers = value;
     }
 
     public set $instances(value: any[]) {
-        this[kInstances] = value;
+        this.#instances = value;
     }
 
     /**

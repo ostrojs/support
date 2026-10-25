@@ -1,3 +1,4 @@
+import { describe, test, expect } from "@jest/globals";
 import { groupBy, last, intersection, shuffle, unique, diff, difference, wrap } from '../src/array';
 
 describe('array', () => {
